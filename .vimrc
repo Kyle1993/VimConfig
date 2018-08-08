@@ -23,7 +23,10 @@ syntax on
 vnoremap <C-c> "+y
 
 " CTRL-V and SHIFT-Insert are Paste 
-map <C-V>        "+gP 
+map <C-v>        "+gP 
+
+" CTRL-a 实现全选
+map <C-a> ggVG
 
 "同步系统剪贴板 如果无法使用：http://www.cnblogs.com/memory4young/p/could-not-use-system-clipboard-in-vim.html 
 set clipboard=unnamed
