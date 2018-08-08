@@ -16,9 +16,14 @@ set shortmess=atI
 "语法高亮
 syntax on
 
-"设置ctrl+c和ctrl+vu快捷键
-"nmap <c-v> "+gp
-"nmap <c-c> "+y
+"在插入模式中使用Ctrl+v粘贴全局剪贴板内容
+"inoremap <C-v> <esc>:set paste<cr>mui<C-R>+<esc>mv'uV'v=:set nopaste<cr>
+
+"在Visual模式中使用Ctrl+c复制内容到全局剪贴板
+vnoremap <C-c> "+y
+
+" CTRL-V and SHIFT-Insert are Paste 
+map <C-V>        "+gP 
 
 "同步系统剪贴板 如果无法使用：http://www.cnblogs.com/memory4young/p/could-not-use-system-clipboard-in-vim.html 
 set clipboard=unnamed
@@ -151,6 +156,9 @@ Plugin 'davidhalter/jedi-vim'
 
 " superTAB
 Plugin 'ervandew/supertab'  
+
+" 代码检查
+Plugin 'vim-syntastic/syntastic'
 
 " 你的所有插件需要在下面这行之前
 call vundle#end()            " 必须
