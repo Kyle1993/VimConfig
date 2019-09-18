@@ -81,8 +81,12 @@ filetype plugin indent on
 map <F3> :NERDTreeToggle<CR>
 let NERDTreeMouseMode=1
 
+" 鼠标可用
 set mouse=a
-" map! <D-c> "+y
+
+" 共享系统剪贴板
+set clipboard=unnamed
+
 
 set cuc
 set cul
