@@ -1,168 +1,101 @@
-" 设定默认解码
-set fenc=utf-8
-set fencs=utf-8,usc-bom,euc-jp,gb18030,gbk,gb2312,cp936
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+set fileencoding=utf-8
+set encoding=utf-8
+set termencoding=utf-8
 
-"配置SuperTab插件
-let g:SuperTabDefaultCompletionType = "context"  
-let g:jedi#popup_on_dot = 0  
-
-
-"显示行号
-set nu
-
-"启动时隐去援助提示
-set shortmess=atI
-
-"语法高亮
-syntax on
-
-"在插入模式中使用Ctrl+v粘贴全局剪贴板内容
-"inoremap <C-v> <esc>:set paste<cr>mui<C-R>+<esc>mv'uV'v=:set nopaste<cr>
-
-"在Visual模式中使用Ctrl+c复制内容到全局剪贴板
-vnoremap <C-c> "+y
-
-" CTRL-V and SHIFT-Insert are Paste 
-map <C-v>        "+gP 
-
-" CTRL-a 实现全选
-map <C-a> ggVG
-
-"同步系统剪贴板 如果无法使用：http://www.cnblogs.com/memory4young/p/could-not-use-system-clipboard-in-vim.html 
-set clipboard=unnamed
-
-"不需要备份
-set nobackup
-
-"没有保存或文件只读时弹出确认
-set confirm
-
-"鼠标可用
-set mouse=a
-
-"tab缩进
 set tabstop=4
 set shiftwidth=4
-set expandtab
-set smarttab
-
-"文件自动检测外部更改
-set autoread
-
-"c文件自动缩进
-set cindent
-
-"自动对齐
 set autoindent
+set cindent 
+set backspace=indent,eol,start  " set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s
 
-"智能缩进
-set smartindent
+if &term=="xterm"        
+	set t_Co=8        
+	set t_Sb=^[[4%dm        
+	set t_Sf=^[[3%dm
+endif
 
-"高亮查找匹配
+au bufwritepost ~/.vimrc  :source ~/.vimrc 	" The config takes effect,
+						" immediately :w .vimrc
+
+let mapleader=","	" set mapleader
+map <leader>ev	:edit ~/.vimrc<cr>
+map <leader>wk  <C-w><C-k>
+
+set nu			" Show number of line
+
+filetype plugin on 
+
+set nocompatible	" Use Vim defaults (much better!)
+
+let g:doxygenToolkit_briefTag_funcName="yes"
+let g:DoxygenToolkit_briefTag_pre="@brief " 
+let g:DoxygenToolkit_paramTag_pre="@param " 
+let g:DoxygenToolkit_returnTag="@return " 
+map <leader>df :Dox<cr>
+
+
+set bs=2		" allow backspacing over everything in insert mode
+"set ai			" always set autoindenting on
+"set backup		" keep a backup file
+set viminfo='20,\"50	" read/write a .viminfo file, don't store more
+			" than 50 lines of registers
+set history=50		" keep 50 lines of command line history
+set ruler		" show the cursor position all the time
+
+autocmd FileType h,c,cpp,python,sh set shiftwidth=4 expandtab ts=4
+
+syntax on
 set hlsearch
-
-"背景色
-set background=dark
-
-"显示匹配
+set smartcase
 set showmatch
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
-"显示标尺，就是在右下角显示光标位置
-set ruler
+"set t_Co=256
+"set showmode
+"set showcmd
+"set title
+"set laststatus=2
+"set report=0
+"set nowrap
+"set novisualbell
 
-"去除vi的一致性
-set nocompatible
-
-"允许折叠
-set foldenable
-"""""""""""""""""设置折叠"""""""""""""""""""""
-"
-"根据语法折叠
-set fdm=syntax
-
-"手动折叠
-"set fdm=manual
-
-"设置键盘映射，通过空格设置折叠
-nnoremap <space> @=((foldclosed(line('.')<0)?'zc':'zo'))<CR>
-""""""""""""""""""""""""""""""""""""""""""""""
-"不要闪烁
-set novisualbell
-
-"启动显示状态行
-set laststatus=2
-
-"浅色显示当前行
-autocmd InsertLeave * se nocul
-
-"用浅色高亮当前行
-autocmd InsertEnter * se cul
-
-"显示输入的命令
-set showcmd
-
-"被分割窗口之间显示空白
-set fillchars=vert:/
-set fillchars=stl:/
-set fillchars=stlnc:/
+"if has("statusline")
+"	set statusline=%F%m%r%h%w\ %=[FORMAT=%{&ff}]\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\"}\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
+"endif
 
 
-map <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-    exec "w"
-    if &filetype == 'c'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'cpp'
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == 'java'
-        exec "!javac %"
-        exec "!time java %<"
-     elseif &filetype == 'sh'
-        :!time bash %
-    elseif &filetype == 'python'
-        exec "!time python3.5 %"
-    elseif &filetype == 'html'
-        exec "!firefox % &"
-    elseif &filetype == 'go'
-        exec "!time go run %"
-    elseif &filetype == 'mkd'
-        exec "!~/.vim/markdown.pl % > %.html &"
-        exec "!firefox %.html &"
-    endif
-endfunc
-
-
-
-" 树型目录
-map <F3> :NERDTreeMirror<CR>
-map <F3> :NERDTreeToggle<CR>
-
-" 插件管理器 vundle
-filetype off                  " 必须要添加
-
-" 设置包括vundle和初始化相关的runtime path
+"set plugin function -> from http://www.jianshu.com/p/f0513d18742a
+filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" 另一种选择, 指定一个vundle安装插件的路径
-"call vundle#begin('~/some/path/here')
-
-" 让vundle管理插件版本,必须
 Plugin 'VundleVim/Vundle.vim'
-
-" 树型目录 NERDTree
+Plugin 'Yggdroot/indentLine'
+Plugin 'tell-k/vim-autopep8'
+Plugin 'Lokaltog/vim-powerline'
 Plugin 'scrooloose/nerdtree'
+call vundle#end()
+filetype plugin indent on
 
-" 自动补全 jedi
-Plugin 'davidhalter/jedi-vim'
+" 配置nerdTree树形显示
+map <F3> :NERDTreeToggle<CR>
+let NERDTreeMouseMode=1
 
-" superTAB
-Plugin 'ervandew/supertab'  
+set mouse=a
+" map! <D-c> "+y
 
-" 代码检查
-Plugin 'vim-syntastic/syntastic'
+set cuc
+set cul
+highlight CursorColumn cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
+highlight CursorLine   cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
+let g:indentLine_char='┆'
+let g:indentLine_enabled = 1
+let g:autopep8_disable_show_diff=1
 
-" 你的所有插件需要在下面这行之前
-call vundle#end()            " 必须
-filetype plugin indent on    " 必须 加载vim自带和插件相应的语法和文件类型相关
+"powerline{
+set guifont=PowerlineSymbols\ for\ Powerline
+set laststatus=2
+set t_Co=256
+"}
+
+
