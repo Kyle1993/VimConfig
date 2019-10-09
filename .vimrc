@@ -15,6 +15,11 @@ if &term=="xterm"
 	set t_Sf=^[[3%dm
 endif
 
+"use solarized vim
+syntax enable
+set background=dark
+colorscheme solarized
+
 au bufwritepost ~/.vimrc  :source ~/.vimrc 	" The config takes effect,
 						" immediately :w .vimrc
 
@@ -74,6 +79,7 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'scrooloose/nerdtree'
+" Plugin 'davidhalter/jedi-vim'
 call vundle#end()
 filetype plugin indent on
 
@@ -87,11 +93,14 @@ set mouse=a
 " 共享系统剪贴板
 set clipboard=unnamed
 
+" 关闭preview窗口
+set completeopt-=preview
 
-set cuc
-set cul
-highlight CursorColumn cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
-highlight CursorLine   cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
+
+" set cuc
+" set cul
+" highlight CursorColumn cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
+" highlight CursorLine   cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
 let g:indentLine_char='┆'
 let g:indentLine_enabled = 1
 let g:autopep8_disable_show_diff=1
